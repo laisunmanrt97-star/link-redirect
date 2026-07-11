@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useToast } from '../components/Toast'
 
 type Domain = {
   id: string
@@ -19,6 +20,7 @@ export function DomainsPage({ token }: { token: string }) {
   const [loadingZones, setLoadingZones] = useState(false)
   const [error, setError] = useState('')
 
+  const { toast } = useToast()
   const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
 
   const loadDomains = () => fetch('/api/domains', { headers }).then(r => r.json()).then(setDomains)
@@ -49,7 +51,9 @@ export function DomainsPage({ token }: { token: string }) {
     const res = await fetch('/api/domains', { method: 'POST', headers, body: JSON.stringify(body) })
     if (!res.ok) {
       const err = await res.json()
-      setError(err.cfError || err.error || 'Error al crear dominio')
+      const msg = err.cfError || err.error || 'Error al crear dominio'
+      setError(msg)
+      toast('error', msg)
       return
     }
 
@@ -60,12 +64,14 @@ export function DomainsPage({ token }: { token: string }) {
     setName('')
     setSelectedZoneId('')
     setShowForm(false)
+    toast('success', 'Dominio creado')
   }
 
   const handleDelete = async (id: string) => {
     if (!confirm('¿Eliminar este dominio y todos sus links?')) return
     await fetch(`/api/domains/${id}`, { method: 'DELETE', headers })
     setDomains(prev => prev.filter(d => d.id !== id))
+    toast('success', 'Dominio eliminado')
   }
 
   return (
