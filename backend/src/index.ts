@@ -8,7 +8,7 @@ import miscRoutes from "./routes/misc";
 import { authMiddleware } from "./middleware/auth";
 
 export const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
@@ -30,6 +30,6 @@ app.get("*", (_req, res) => {
   res.sendFile(path.join(frontendDist, "index.html"));
 });
 
-app.listen(PORT, () => {
-  console.log(`Backend running on http://localhost:${PORT}`);
+app.listen(Number(PORT), "0.0.0.0", () => {
+  console.log(`Backend running on http://0.0.0.0:${PORT}`);
 });
