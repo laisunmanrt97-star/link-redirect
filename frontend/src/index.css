@@ -1,20 +1,22 @@
 @import "tailwindcss";
-
 @theme {
-  --color-bg: #0a0a0a;
-  --color-surface: #141414;
-  --color-border: #222;
-  --color-accent: #00ff41;
-  --color-accent-dim: #00cc33;
-  --color-muted: #666;
-  --color-text: #e0e0e0;
-  --color-danger: #ff3355;
+  --color-bg: #080C14;
+  --color-surface: #0C1220;
+  --color-border: rgba(148, 163, 184, 0.25);
+  --color-accent: #00E5FF;
+  --color-accent-dim: rgba(0, 229, 255, 0.35);
+  --color-muted: #94A3B8;
+  --color-text: #FFFFFF;
+  --color-danger: #FF3355;
+  --font-sans: 'Inter', sans-serif;
 }
 
 body {
   background: var(--color-bg);
   color: var(--color-text);
-  font-family: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Scrollbar minimal */
@@ -28,3 +30,9 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 .animate-in { animation: fadeIn 0.2s ease-out; }
+
+/* Glow de acento característico Upfunnel */
+.uf-glow { box-shadow: 0 0 24px rgba(0, 229, 255, 0.35); }
+
+/* Borde sutil sobre fondo oscuro */
+.uf-border { border: 1px solid rgba(148, 163, 184, 0.25); }

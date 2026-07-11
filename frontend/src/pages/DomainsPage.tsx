@@ -54,11 +54,9 @@ export function DomainsPage({ token }: { token: string }) {
     }
 
     const result = await res.json()
-    if (result.domain) {
-      setDomains(prev => [...prev, result.domain])
-    } else {
-      setDomains(prev => [...prev, result])
-    }
+    if (result.domain) setDomains(prev => [...prev, result.domain])
+    else setDomains(prev => [...prev, result])
+
     setName('')
     setSelectedZoneId('')
     setShowForm(false)
@@ -73,23 +71,23 @@ export function DomainsPage({ token }: { token: string }) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Dominios</h2>
+        <h2 className="text-lg font-bold tracking-tight">Dominios</h2>
         <button
           onClick={handleOpenForm}
-          className="px-3 py-1.5 text-sm border border-accent/30 text-accent rounded hover:bg-accent/10 transition-colors"
+          className="px-4 py-2 text-sm font-semibold rounded-lg text-accent bg-accent/10 uf-border hover:bg-accent/20 uf-glow transition-all"
         >
           {showForm ? 'Cancelar' : '+ Dominio'}
         </button>
       </div>
 
       {showForm && (
-        <form onSubmit={handleCreate} className="bg-surface border border-border rounded p-4 space-y-3 animate-in">
+        <form onSubmit={handleCreate} className="bg-surface uf-border rounded-lg p-5 space-y-4 animate-in">
           <input
             type="text"
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder="ej: upfunnel.click"
-            className="w-full bg-bg border border-border rounded px-3 py-2 text-sm focus:outline-none focus:border-accent"
+            className="w-full bg-bg uf-border rounded-lg px-4 py-3 text-sm font-medium text-text placeholder:text-muted/50 focus:outline-none focus:border-accent transition-colors"
             autoFocus
           />
 
@@ -97,42 +95,40 @@ export function DomainsPage({ token }: { token: string }) {
             <select
               value={selectedZoneId}
               onChange={e => setSelectedZoneId(e.target.value)}
-              className="w-full bg-bg border border-border rounded px-3 py-2 text-sm focus:outline-none focus:border-accent"
+              className="w-full bg-bg uf-border rounded-lg px-4 py-3 text-sm font-medium text-text focus:outline-none focus:border-accent transition-colors"
             >
               <option value="">Solo en DB (sin Cloudflare)</option>
               {loadingZones && <option disabled>Cargando zonas...</option>}
-              {zones.map(z => (
-                <option key={z.id} value={z.id}>{z.name}</option>
-              ))}
+              {zones.map(z => <option key={z.id} value={z.id}>{z.name}</option>)}
             </select>
-            <p className="text-xs text-muted mt-1">
+            <p className="text-xs text-muted mt-1.5 font-medium">
               Si seleccionás una zona, se configura DNS wildcard + Worker Route automáticamente.
             </p>
           </div>
 
-          {error && <p className="text-danger text-xs">{error}</p>}
+          {error && <p className="text-danger text-xs font-medium">{error}</p>}
 
-          <button type="submit" className="px-4 py-1.5 text-sm bg-accent/10 text-accent border border-accent/30 rounded hover:bg-accent/20 transition-colors">
-            Crear
+          <button type="submit" className="px-5 py-2.5 text-sm font-bold rounded-lg bg-accent text-bg hover:bg-[#00CCE0] transition-colors">
+            Crear Dominio
           </button>
         </form>
       )}
 
       {domains.length === 0 ? (
-        <p className="text-muted text-sm">No hay dominios registrados.</p>
+        <p className="text-muted text-sm font-medium">No hay dominios registrados.</p>
       ) : (
         <div className="space-y-2">
           {domains.map(d => (
-            <div key={d.id} className="bg-surface border border-border rounded px-4 py-3 flex items-center justify-between animate-in">
+            <div key={d.id} className="bg-surface uf-border rounded-lg px-5 py-4 flex items-center justify-between animate-in">
               <div>
-                <span className="text-text font-medium">{d.name}</span>
-                <span className="text-muted text-xs ml-2">
+                <span className="text-text font-semibold">{d.name}</span>
+                <span className="text-muted text-xs font-medium ml-3">
                   {d._count.links} links · {d.wildcardConfigured ? '✓ cloudflare configurado' : '○ solo DB'}
                 </span>
               </div>
               <button
                 onClick={() => handleDelete(d.id)}
-                className="text-xs text-muted hover:text-danger transition-colors"
+                className="text-xs font-medium text-muted hover:text-danger transition-colors"
               >
                 eliminar
               </button>
