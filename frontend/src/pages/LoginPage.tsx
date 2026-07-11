@@ -20,7 +20,7 @@ export function LoginPage({ onLogin }: { onLogin: (token: string) => void }) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-bg">
+    <div className="min-h-screen flex items-center justify-center bg-transparent relative" style={{zIndex: 10}}>
       <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-5 p-8 animate-in">
         <div className="text-center mb-4">
           <div className="w-12 h-12 rounded-full uf-glow flex items-center justify-center mx-auto mb-4" style={{background: 'rgba(0, 229, 255, 0.1)'}}>

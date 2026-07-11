@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { LinksPage } from './pages/LinksPage'
 import { DomainsPage } from './pages/DomainsPage'
 import { LoginPage } from './pages/LoginPage'
+import { ParticlesBackground } from './components/ParticlesBackground'
 
 type Page = 'links' | 'domains'
 
@@ -9,12 +10,18 @@ function App() {
   const [token, setToken] = useState(() => localStorage.getItem('rl_token') || '')
   const [page, setPage] = useState<Page>('links')
 
-  if (!token) return <LoginPage onLogin={setToken} />
+  if (!token) return (
+    <>
+      <ParticlesBackground />
+      <LoginPage onLogin={setToken} />
+    </>
+  )
 
   return (
-    <div className="min-h-screen bg-bg">
+    <div className="min-h-screen bg-bg relative">
+      <ParticlesBackground />
       {/* Header */}
-      <header className="uf-border px-6 py-4 flex items-center justify-between" style={{borderBottomWidth: 1}}>
+      <header className="uf-border px-6 py-4 flex items-center justify-between relative" style={{zIndex: 10, borderBottomWidth: 1}}>
         <div className="flex items-center gap-8">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-full uf-glow flex items-center justify-center" style={{background: 'rgba(0, 229, 255, 0.1)'}}>
@@ -56,7 +63,7 @@ function App() {
         </button>
       </header>
 
-      <main className="max-w-5xl mx-auto px-6 py-8 animate-in">
+      <main className="max-w-5xl mx-auto px-6 py-8 animate-in relative" style={{zIndex: 10}}>
         {page === 'links' ? <LinksPage token={token} /> : <DomainsPage token={token} />}
       </main>
     </div>
