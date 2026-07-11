@@ -1,0 +1,13 @@
+{
+  "name": "redirect-worker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev src/index.ts",
+    "deploy": "wrangler deploy src/index.ts"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.0.0",
+    "wrangler": "^4.0.0"
+  }
+}

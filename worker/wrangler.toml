@@ -1,0 +1,11 @@
+name = "redirect-worker"
+main = "src/index.ts"
+compatibility_date = "2025-02-01"
+
+[[kv_namespaces]]
+binding = "REDIRECT_KV"
+id = "5ebebcdc50274d508bbcb6fb453de34e"
+preview_id = "5ebebcdc50274d508bbcb6fb453de34e"
+
+[vars]
+API_BASE_URL = "https://ink-redirect.upfunnel.click"
