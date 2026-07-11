@@ -14,6 +14,7 @@ const createSchema = z.object({
 });
 
 const updateSchema = z.object({
+  subdomain: z.string().min(1).max(63).optional(),
   destinationUrl: z.string().url().optional(),
   active: z.boolean().optional(),
 });
@@ -113,16 +114,30 @@ protectedRouter.patch("/:id", async (req: Request, res: Response) => {
   const link = await prisma.link.findUnique({ where: { id }, include: { domain: true } });
   if (!link) return res.status(404).json({ error: "Link no encontrado" });
 
-  const updated = await prisma.link.update({ where: { id }, data, include: { domain: true } });
+  const newSubdomain = data.subdomain ?? link.subdomain;
+  const newDest = data.destinationUrl ?? link.destinationUrl;
+  const isActive = data.active !== undefined ? data.active : link.active;
+  const oldHostname = `${link.subdomain}.${link.domain.name}`;
+  const newHostname = `${newSubdomain}.${link.domain.name}`;
 
-  const hostname = `${link.subdomain}.${link.domain.name}`;
+  const updated = await prisma.link.update({
+    where: { id },
+    data: { subdomain: newSubdomain, destinationUrl: newDest, active: isActive },
+    include: { domain: true },
+  });
+
   try {
-    if (updated.active) {
-      await kvPut(hostname, updated.destinationUrl);
-      await kvPut(`${hostname}:id`, updated.id);
+    // Si cambió subdominio, limpiar key vieja
+    if (oldHostname !== newHostname) {
+      await kvDelete(oldHostname);
+      await kvDelete(`${oldHostname}:id`);
+    }
+    if (isActive) {
+      await kvPut(newHostname, newDest);
+      await kvPut(`${newHostname}:id`, updated.id);
     } else {
-      await kvDelete(hostname);
-      await kvDelete(`${hostname}:id`);
+      await kvDelete(newHostname);
+      await kvDelete(`${newHostname}:id`);
     }
   } catch (err) {
     console.error("Error syncing KV:", err);
